@@ -46,7 +46,7 @@ const fullInfoBlock: Command[] = [
 ];
 
 const filteredBlocks: Record<string, Command[]> = {
-    '-origin': [
+    '--origin': [
       fullInfoBlock[6],
       {
         text: '',
@@ -54,7 +54,7 @@ const filteredBlocks: Record<string, Command[]> = {
         style: '',
       },
     ],
-    '-identity': [
+    '--identity': [
       fullInfoBlock[1],
       {
         text: '',
@@ -62,7 +62,7 @@ const filteredBlocks: Record<string, Command[]> = {
         style: '',
       },
     ],
-    '-stack': [
+    '--stack': [
       fullInfoBlock[2],
       {
         text: '',
@@ -70,7 +70,7 @@ const filteredBlocks: Record<string, Command[]> = {
         style: '',
       },
     ],
-    '-mission': [
+    '--mission': [
       fullInfoBlock[7],
       {
         text: '',
@@ -78,7 +78,7 @@ const filteredBlocks: Record<string, Command[]> = {
         style: '',
       },
     ],
-    '-design': [
+    '--design': [
       fullInfoBlock[4],
       fullInfoBlock[3],
       {
@@ -87,7 +87,7 @@ const filteredBlocks: Record<string, Command[]> = {
         style: '',
       },
     ],
-    '-purpose': [
+    '--purpose': [
       fullInfoBlock[5],
       {
         text: '',
@@ -95,7 +95,7 @@ const filteredBlocks: Record<string, Command[]> = {
         style: '',
       },
     ],
-    '-system': [
+    '--system': [
       fullInfoBlock[0],
       {
         text: '',
@@ -103,7 +103,7 @@ const filteredBlocks: Record<string, Command[]> = {
         style: '',
       },
     ],
-    '-status': [
+    '--status': [
       fullInfoBlock[0],
       {
         text: '',
@@ -111,7 +111,7 @@ const filteredBlocks: Record<string, Command[]> = {
         style: '',
       },
     ],
-    '-all': fullInfoBlock,
+    '--all': fullInfoBlock,
   };
 
 export const runInfo = async (

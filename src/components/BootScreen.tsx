@@ -18,51 +18,85 @@ export default function BootScreen({ onFinish }: { onFinish: () => void }) {
   const [dots, setDots] = useState('');
   const [isComplete, setIsComplete] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const [isPreBootDone, setIsPreBootDone] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
   useEffect(() => {
-    if (!isClient) return;
+    if (!isClient || isPreBootDone) return;
+  
+    const prebootTimeout = setTimeout(() => {
+      setIsPreBootDone(true);
+    }, 12000); // más tiempo de lectura si querés
+  
+    const handleKey = () => {
+      clearTimeout(prebootTimeout);
+      setIsPreBootDone(true);
+    };
+  
+    window.addEventListener('keydown', handleKey);
+    return () => {
+      clearTimeout(prebootTimeout);
+      window.removeEventListener('keydown', handleKey);
+    };
+  }, [isClient, isPreBootDone]);
 
-    if (currentIndex >= bootMessages.length) {
+  useEffect(() => {
+    if (!isPreBootDone || currentIndex > bootMessages.length) return;
+  
+    // Si terminó
+    if (currentIndex === bootMessages.length) {
       setIsComplete(true);
-      setTimeout(() => {
-        setVisibleLines((lines) => [...lines, '[READY]']);
-        setTimeout(onFinish, 1000);
-      }, 1000);
+      setVisibleLines((lines) => [...lines, '[READY]']);
+      setTimeout(onFinish, 1000);
       return;
     }
-
+  
     let dotCount = 0;
     const dotInterval = setInterval(() => {
       dotCount++;
       setDots('.'.repeat(dotCount % 4));
     }, 300);
-
-    const fullMessage = `${bootMessages[currentIndex]}`;
-    const delay = 80;
-
+  
+    const fullMessage = bootMessages[currentIndex];
+    const delay = 400 + Math.random() * 400;
+  
     const finishLine = setTimeout(() => {
       clearInterval(dotInterval);
       setDots('');
-      setVisibleLines((lines) => [
-        ...lines,
-        
-        `${fullMessage} <ok/>`,
-      ]);
+      setVisibleLines((lines) => [...lines, `${fullMessage} <ok/>`]);
       setCurrentIndex((i) => i + 1);
     }, delay);
-
+  
     return () => {
       clearInterval(dotInterval);
       clearTimeout(finishLine);
     };
-  }, [currentIndex, onFinish, isClient]);
+  }, [currentIndex, onFinish, isPreBootDone]);
 
   if (!isClient) return null;
 
+  // === PREBOOT MESSAGE ===
+  if (!isPreBootDone) {
+    return (
+      <div className="flex items-center justify-center w-screen h-screen px-4 font-mono text-sm text-center text-green-400 bg-black">
+        <div>
+          <p>Thank you for visiting my site.</p>
+          <p className="mt-2">
+            You&apos;re about to enter a fully interactive portfolio,
+            <br />
+            designed to emulate a Spartan HUD from the Halo universe.
+          </p>
+          <p className="mt-2">Engage, explore, and execute commands as if you were inside ONI Command.</p>
+          <p className="mt-4 text-blue-400 animate-pulse">Press any key to initialize immediately...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // === BOOT SEQUENCE ===
   return (
     <div className="flex flex-col font-mono text-sm text-green-400">
       {visibleLines.map((line, i) => {

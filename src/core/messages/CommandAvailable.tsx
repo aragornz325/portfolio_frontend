@@ -7,7 +7,7 @@ export const commandAvailable = [
     },
     {
         command: 'Command: info',
-        description: `Display system information.\nModifiers: -origin, -status, -stack, -identity, -mission, -design`,
+        description: `Display system information.\nModifiers: [--origin], [--status], [--stack], [--identity], [--mission], [--design]`,
     },
     {
         command: 'Command: clear',
@@ -23,7 +23,7 @@ export const commandAvailable = [
     },
     {
         command: 'Command: missions',
-        description: 'Display all mission logs',
+        description: 'Display all mission logs. \nModifiers: [--download]',
     },
     {
         command: 'Command: distress',

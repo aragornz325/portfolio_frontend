@@ -65,15 +65,15 @@ export default function Terminal() {
 
         switch (lower) {
             case 'info':
-            case 'info -all':
-            case 'info -origin':
-            case 'info -identity':
-            case 'info -stack':
-            case 'info -mission':
-            case 'info -design':
-            case 'info -purpose':
-            case 'info -system':
-            case 'info -status':
+            case 'info --all':
+            case 'info --origin':
+            case 'info --identity':
+            case 'info --stack':
+            case 'info --mission':
+            case 'info --design':
+            case 'info --purpose':
+            case 'info --system':
+            case 'info --status':
                 setIsLocked(true);
                 runInfo(cmd, setHistory, setInput).then(() => {
                     setIsLocked(false);
@@ -107,6 +107,8 @@ export default function Terminal() {
                 });
                 return;
             case 'missions':
+            case 'missions --deep':
+            case 'missions --download':
                 setIsLocked(true);
                 runMissionLogs(cmd, setHistory, setInput, waitForKey).then(() => {
                     setIsLocked(false);

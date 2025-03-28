@@ -1,5 +1,6 @@
 import { Command } from '@/types/Command';
 import missions from '../messages/missions.json';
+import missionsDeepReport from '../messages/missionsDeepReport.json'; 
 
 const delay = (ms: number) => new Promise((res) => setTimeout(res, ms));
 
@@ -9,6 +10,50 @@ export const runMissionLogs = async (
   setInput: React.Dispatch<React.SetStateAction<string>>,
   waitForKey: () => Promise<void>
 ) => {
+  const lower = cmd.toLowerCase();
+
+  // === HANDLE "--download"
+  if (lower.includes('--download')) {
+    setHistory((prev) => [
+      ...prev,
+      { text: cmd, output: '[SECURE CHANNEL ESTABLISHED...]', style: 'text-green-400' },
+      {
+        text: '',
+        output:
+          '[MISSION FILE READY] → <a href="https://drive.google.com/file/d/1qLLc7nIkoWqKe9mSbis_tJsJ37fZWwOu/view?usp=sharing" target="_blank" class="text-blue-400 underline">DOWNLOAD CV .PDF</a>',
+        style: 'text-white',
+      },
+    ]);
+    setInput('');
+    return;
+  }
+
+  // === HANDLE "--deep"
+    // === HANDLE "--deep"
+    if (lower.includes('--deep')) {
+      setHistory((prev) => [
+        ...prev,
+        { text: cmd, output: '[ACCESSING FULL MISSION ARCHIVE...]', style: 'text-green-400' },
+      ]);
+      await delay(600);
+  
+      for (const line of missionsDeepReport.lines) {
+        setHistory((prev) => [
+          ...prev,
+          { text: '', output: line, style: 'text-white' },
+        ]);
+        await delay(50); // Simula impresión LX-300
+      }
+  
+      setHistory((prev) => [
+        ...prev,
+        { text: '', output: '[FULL DOSSIER TRANSMISSION COMPLETE]', style: 'text-green-400' },
+      ]);
+      setInput('');
+      return;
+    }
+
+  // === DEFAULT MISSIONS LOG (tu código original)
   setHistory((prev) => [
     ...prev,
     { text: cmd, output: '[ACCESSING OPERATIONAL HISTORY...]', style: 'text-default' },
@@ -53,7 +98,7 @@ export const runMissionLogs = async (
 
         block.push({
           text: '',
-          output: `<span class=\"${labelColor}\">${label}:</span> ${content}`,
+          output: `<span class="${labelColor}">${label}:</span> ${content}`,
           style: '',
         });
       } else if (detail.startsWith('Status:')) {
@@ -62,7 +107,7 @@ export const runMissionLogs = async (
         const statusLabel = isActive ? '[ACTIVE]' : '[TERMINATED]';
         block.push({
           text: '',
-          output: `Status: <span class=\"${statusColor} animate-pulse\">${statusLabel}</span>`,
+          output: `Status: <span class="${statusColor} animate-pulse">${statusLabel}</span>`,
           style: '',
         });
       } else {
@@ -86,6 +131,9 @@ export const runMissionLogs = async (
   }
 
   await delay(500);
-  setHistory((prev) => [...prev, { text: '', output: '[MISSIONS LOG COMPLETE.]', style: 'text-default' }]);
+  setHistory((prev) => [
+    ...prev,
+    { text: '', output: '[MISSIONS LOG COMPLETE.]', style: 'text-default' },
+  ]);
   setInput('');
 };
