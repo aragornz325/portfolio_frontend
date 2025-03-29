@@ -1,6 +1,7 @@
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ReactQueryProvider } from "@/lib/providers/reac-query-provider";
+import { Analytics } from '@vercel/analytics/next';
 
 
 const geistMono = Geist_Mono({
@@ -23,6 +24,7 @@ export default function RootLayout({
       <body className={geistMono.variable}>
         <ReactQueryProvider>
           {children}
+          <Analytics />
         </ReactQueryProvider>
       </body>
     </html>
