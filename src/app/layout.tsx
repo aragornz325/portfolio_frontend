@@ -1,5 +1,7 @@
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { ReactQueryProvider } from "@/lib/providers/reac-query-provider";
+
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -19,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={geistMono.variable}>
-        {children}
+        <ReactQueryProvider>
+          {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );

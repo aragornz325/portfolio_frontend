@@ -1,19 +1,26 @@
 'use client';
 
+import { getStatusClass } from '@/core/helpers/getStatusClass';
+import { commandBooting } from '@/types/Command';
 import { useEffect, useState } from 'react';
 
-const bootMessages = [
-  '[BOOT SEQUENCE INITIATED]',
-  '[LINKING TO SPARTAN-117 SYSTEMS]',
-  '[PROTOCOL CORTANA ONLINE]',
-  '[LOADING ARMOR BIOS]',
-  '[LOADING WEAPON SYSTEMS]',
-  '[CALIBRATING NEURAL INTERFACE]',
-  '[MISSION FILES ACQUIRED]',
+const bootMessages: commandBooting[] = [
+  { label: '[BOOT SEQUENCE INITIATED]', status: 'info' },
+  { label: '[LINKING TO SPARTAN-117 SYSTEMS]', status: 'ok' },
+  { label: '[PROTOCOL CORTANA ONLINE]', status: 'ok' },
+  { label: '[LOADING ARMOR BIOS]', status: 'ok' },
+  { label: '[LOADING WEAPON SYSTEMS]', status: 'ok' },
+  { label: '[WEAPON SYSTEMS FAILURE]', status: 'error' },
+  { label: '[LOADING AI PROTOCOL]', status: 'ok' },
+  { label: '[LOADING NAVIGATION SYSTEM]', status: 'ok' },
+  { label: '[LOADING COMMUNICATIONS]', status: 'ok' },
+  { label: '[CALIBRATING NEURAL INTERFACE]', status: 'warn' },
+  { label: '[MISSION FILES ACQUIRED]', status: 'ok' },
 ];
 
+
 export default function BootScreen({ onFinish }: { onFinish: () => void }) {
-  const [visibleLines, setVisibleLines] = useState<string[]>([]);
+  const [visibleLines, setVisibleLines] = useState<commandBooting[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [dots, setDots] = useState('');
   const [isComplete, setIsComplete] = useState(false);
@@ -27,18 +34,18 @@ export default function BootScreen({ onFinish }: { onFinish: () => void }) {
   useEffect(() => {
     if (!isClient || isPreBootDone) return;
   
-    const prebootTimeout = setTimeout(() => {
+    const preBootTimeout = setTimeout(() => {
       setIsPreBootDone(true);
-    }, 12000); // más tiempo de lectura si querés
+    }, 8000); 
   
     const handleKey = () => {
-      clearTimeout(prebootTimeout);
+      clearTimeout(preBootTimeout);
       setIsPreBootDone(true);
     };
   
     window.addEventListener('keydown', handleKey);
     return () => {
-      clearTimeout(prebootTimeout);
+      clearTimeout(preBootTimeout);
       window.removeEventListener('keydown', handleKey);
     };
   }, [isClient, isPreBootDone]);
@@ -49,7 +56,7 @@ export default function BootScreen({ onFinish }: { onFinish: () => void }) {
     // Si terminó
     if (currentIndex === bootMessages.length) {
       setIsComplete(true);
-      setVisibleLines((lines) => [...lines, '[READY]']);
+      setVisibleLines((lines) => [...lines, { label: '[READY]', status: 'ok' }]);
       setTimeout(onFinish, 1000);
       return;
     }
@@ -61,12 +68,12 @@ export default function BootScreen({ onFinish }: { onFinish: () => void }) {
     }, 300);
   
     const fullMessage = bootMessages[currentIndex];
-    const delay = 400 + Math.random() * 400;
+    const delay = Math.random() * 650;
   
     const finishLine = setTimeout(() => {
       clearInterval(dotInterval);
       setDots('');
-      setVisibleLines((lines) => [...lines, `${fullMessage} <ok/>`]);
+      setVisibleLines((lines) => [...lines, { label: fullMessage.label, status: fullMessage.status }]);
       setCurrentIndex((i) => i + 1);
     }, delay);
   
@@ -98,26 +105,27 @@ export default function BootScreen({ onFinish }: { onFinish: () => void }) {
 
   // === BOOT SEQUENCE ===
   return (
-    <div className="flex flex-col font-mono text-sm text-green-400">
-      {visibleLines.map((line, i) => {
-        const [beforeOK, hasOK] = line.split('<ok/>');
-        return (
-          <div key={i}>
-            {beforeOK}
-            {hasOK !== undefined && <span className="text-blue-400"> OK</span>}
-          </div>
-        );
-      })}
-
-      {!isComplete && (
-        <div>
-          {bootMessages[currentIndex]}
+    <div className="flex flex-col px-4 text-sm font-terminal sm:text-base">
+      {visibleLines.map((line, i) => (
+  <div key={i} className="whitespace-pre">
+    <span className="text-terminal-neutro">{line.label}</span>
+    {line.status && (
+      <span className={`ml-2 font-bold ${getStatusClass(line.status)}`}>
+        {line.status.toUpperCase()}
+      </span>
+    )}
+  </div>
+))}
+  
+      {!isComplete && currentIndex < bootMessages.length && (
+        <div className={`${getStatusClass(bootMessages[currentIndex].status || 'info')} whitespace-pre`}>
+          {bootMessages[currentIndex].label}
           {dots}
         </div>
       )}
-
+  
       {isComplete && (
-        <div className="mt-2 text-green-600">
+        <div className="mt-2 text-terminal-ok">
           λ
         </div>
       )}

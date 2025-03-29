@@ -9,12 +9,16 @@ export const runWeaponsSequence = async (
 ) => {
   setHistory((prev) => [
     ...prev,
-    { text: cmd, output: '[ACCESSING SPARTAN-RMQ-117 COMBAT INTERFACE...]', style: ' text-red-300 text-sm sm:text-base md:text-base lg:text-lg leading-snug break-words'  },
+    { text: cmd, 
+      output: '[ACCESSING SPARTAN-RMQ-117 COMBAT INTERFACE...]', 
+      style: ' text-red-300 text-sm sm:text-base md:text-base lg:text-base leading-snug break-words' },
   ]);
   await delay(600);
   setHistory((prev) => [
     ...prev,
-    { text: '', output: '[LOADING TACTICAL LOADOUT...]', style: ' text-yellow-300 text-sm sm:text-base md:text-base lg:text-lg leading-snug break-words'  },
+    { text: '', 
+      output: '[LOADING TACTICAL LOADOUT...]', 
+      style: ' text-yellow-300 text-sm sm:text-base md:text-base lg:text-base leading-snug break-words' },
   ]);
 
   const loadout = [
@@ -40,14 +44,18 @@ export const runWeaponsSequence = async (
     await delay(150);
     setHistory((prev) => [
       ...prev,
-      { text: '', output: `→ ${line}`, style: ' text-white text-sm sm:text-base md:text-base lg:text-lg leading-snug break-words' }
+      { text: '', 
+        output: `→ ${line}`, 
+        style: ' text-white text-sm sm:text-base md:text-base lg:text-base leading-snug break-words' }
     ]);
   }
 
   await delay(600);
   setHistory((prev) => [
     ...prev,
-    { text: '', output: '[LOADOUT COMPLETE.]', style: ' text-yellow-300 text-sm sm:text-base md:text-base lg:text-lg leading-snug break-words' }
+    { text: '', 
+      output: '[LOADOUT COMPLETE.]', 
+      style: ' text-yellow-300 text-sm sm:text-base md:text-base lg:text-base leading-snug break-words' }
   ]);
   setInput('');
 };

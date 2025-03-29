@@ -1,3 +1,6 @@
+import { hailingSequence } from '@/core/messages/Haling';
+import { sendHailingSignal } from '@/lib/repositories/sendHailingSignal';
+import { useMutation } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 function isMobileDevice() {
@@ -5,7 +8,7 @@ function isMobileDevice() {
     return /Mobi|Android/i.test(navigator.userAgent);
 }
 
-export default function DistressBeacon({ onComplete }: { onComplete: () => void }) {
+export default function HailingSignal({ onComplete }: { onComplete: () => void }) {
     const [step, setStep] = useState<'confirm' | 'email' | 'phone' | 'location' | 'message' | 'review' | 'sending' | 'done'>('confirm');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
@@ -40,49 +43,62 @@ export default function DistressBeacon({ onComplete }: { onComplete: () => void 
         }
     };
 
-    const sendBeacon = async () => {
+    const mutation = useMutation({
+        mutationFn: sendHailingSignal,
+      });
+
+      const sendBeacon = async () => {
         setStep('sending');
+        setLog([]); 
+      
         const payload = { email, phone, location, message };
-        console.log('Distress Beacon Payload:', payload);
-        const sequence = [
-            '[COMPILING PAYLOAD...]',
-            '[COMPRESSING DATA...]',
-            '[CALIBRATING SIGNAL...]',
-            '[INITIATING CLASS-7 EMERGENCY BEACON...]',
-            '[SIGNAL LAUNCHED.]',
-        ];
-        for (let i = 0; i < sequence.length; i++) {
-            await new Promise((res) => setTimeout(res, 800));
-            setLog((prev) => [...prev, sequence[i]]);
+      
+        for (let i = 0; i < hailingSequence.length; i++) {
+          await new Promise((res) => setTimeout(res, 800));
+          setLog((prev) => [...prev, hailingSequence[i]]);
         }
-        setTimeout(() => setStep('done'), 1000);
-    };
+      
+        try {
+          const res = await mutation.mutateAsync(payload);
+          console.log('✅ Beacon sent:', res);
+          setTimeout(() => setStep('done'), 1000);
+        } catch (err) {
+          console.error('❌ Beacon transmission failed:', err);
+          setLog((prev) => [
+            ...prev,
+            '',
+            '[CRITICAL FAILURE]',
+            '> Beacon transmission failed.',
+            '> Position may have been compromised.',
+          ]);
+        }
+      };
 
     if (step === 'confirm') {
         return (
             <div className="pl-8 text-white animate-pulse">
-                ⚠ This action will send a distress beacon to Spartan-rmq-117.<br />
-                Are you sure you want to proceed? 
+                ⚠ This action will initiate a hailing signal to Spartan-rmq-117.<br />
+                Are you sure you want to proceed?
                 <br />
                 {isMobile ? (
-                <div className="flex gap-4 mt-2">
-                    <button className="px-4 py-1 bg-green-600 rounded blink" onClick={() => setStep('email')}>YES</button>
-                    <button className="px-4 py-1 bg-red-600 rounded blink" onClick={() => onComplete()}>NO</button>
-                </div>
-            ) : (
-                <>
-                    (<span className="text-green-400"> Y </span>) / (<span className="text-red-400"> N </span>)
-                    <br />
-                    <input
-                        className="text-white bg-transparent outline-none"
-                        onKeyDown={(e) => {
-                            if (e.key.toLowerCase() === 'y') setStep('email');
-                            if (e.key.toLowerCase() === 'n') onComplete();
-                        }}
-                        autoFocus
-                    />
-                </>
-            )}
+                    <div className="flex gap-4 mt-2">
+                        <button className="px-4 py-1 bg-green-600 rounded blink" onClick={() => setStep('email')}>YES</button>
+                        <button className="px-4 py-1 bg-red-600 rounded blink" onClick={() => onComplete()}>NO</button>
+                    </div>
+                ) : (
+                    <>
+                        (<span className="text-green-400"> Y </span>) / (<span className="text-red-400"> N </span>)
+                        <br />
+                        <input
+                            className="text-white bg-transparent outline-none"
+                            onKeyDown={(e) => {
+                                if (e.key.toLowerCase() === 'y') setStep('email');
+                                if (e.key.toLowerCase() === 'n') onComplete();
+                            }}
+                            autoFocus
+                        />
+                    </>
+                )}
             </div>
         );
     }
@@ -154,7 +170,7 @@ export default function DistressBeacon({ onComplete }: { onComplete: () => void 
         return (
             <div className="pl-8 text-white">
                 All fields collected.<br />
-                Proceed to transmit the beacon? 
+                Proceed to transmit the beacon?
                 <br />
                 {isMobile ? (
                     <div className="flex gap-4 mt-2">
@@ -163,16 +179,16 @@ export default function DistressBeacon({ onComplete }: { onComplete: () => void 
                     </div>
                 ) : (
                     <>
-                    (<span className="text-green-400"> Y </span>) / (<span className="text-red-400"> N </span>)<br />
-                    <input
-                        className="text-white bg-transparent outline-none"
-                        onKeyDown={(e) => {
-                            if (e.key.toLowerCase() === 'y') sendBeacon();
-                            if (e.key.toLowerCase() === 'n') onComplete();
-                        }}
-                        autoFocus
-                    />
-                        </>
+                        (<span className="text-green-400"> Y </span>) / (<span className="text-red-400"> N </span>)<br />
+                        <input
+                            className="text-white bg-transparent outline-none"
+                            onKeyDown={(e) => {
+                                if (e.key.toLowerCase() === 'y') sendBeacon();
+                                if (e.key.toLowerCase() === 'n') onComplete();
+                            }}
+                            autoFocus
+                        />
+                    </>
                 )}
             </div>
         );
@@ -191,9 +207,9 @@ export default function DistressBeacon({ onComplete }: { onComplete: () => void 
     if (step === 'done') {
         return (
             <div className="pl-8 text-white animate-pulse">
-                A distress signal has been sent.<br />
-                Await response from Spartan-rmq-117<br />
-                Connection closed...
+                Hailing frequency opened.<br />
+                Awaiting acknowledgement from Spartan-rmq-117<br />
+                Frequency closed...
             </div>
         );
     }

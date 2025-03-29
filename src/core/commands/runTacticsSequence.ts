@@ -9,7 +9,11 @@ export const runTacticsSequence = async (
 ) => {
     setHistory((prev) => [
         ...prev,
-        { text: cmd, output: '[ENGAGING TACTICAL PROTOCOLS...]', style: ' text-yellow-300 text-sm sm:text-base md:text-base lg:text-lg leading-snug break-words' },
+        {
+            text: cmd,
+            output: '[ENGAGING TACTICAL PROTOCOLS...]',
+            style: ' text-yellow-300 text-sm sm:text-base md:text-base lg:text-base leading-snug break-words'
+        },
     ]);
     await delay(600);
 
@@ -26,10 +30,16 @@ export const runTacticsSequence = async (
 
     for (const line of tactics) {
         await delay(150);
-        setHistory((prev) => [...prev, { text: '', output: `→ ${line}`, style: 'text-white text-sm sm:text-base md:text-base lg:text-lg leading-snug break-words' }]);
+        setHistory((prev) => [...prev, {
+            text: '', output: `→ ${line}`,
+            style: 'text-white text-sm sm:text-base md:text-base lg:text-base leading-snug break-words'
+        }]);
     }
 
     await delay(600);
-    setHistory((prev) => [...prev, { text: '', output: '[TACTICAL SYSTEMS NOMINAL.]', style: 'text-yellow-300 text-sm sm:text-base md:text-base lg:text-lg leading-snug break-words' }]);
+    setHistory((prev) => [...prev, {
+        text: '', output: '[TACTICAL SYSTEMS NOMINAL.]',
+        style: 'text-yellow-300 text-sm sm:text-base md:text-base lg:text-base leading-snug break-words'
+    }]);
     setInput('');
 };

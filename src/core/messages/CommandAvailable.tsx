@@ -26,8 +26,8 @@ export const commandAvailable = [
         description: 'Display all mission logs. \nModifiers: [--download]',
     },
     {
-        command: 'Command: distress',
-        description: 'Launching UNSC Class-7 Emergency Beacon',
+        command: 'Command: hail',
+        description: 'Initiating UNSC Standard Hailing Protocol – Class Sigma',
     },
 
 ];

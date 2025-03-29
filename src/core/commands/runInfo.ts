@@ -35,7 +35,7 @@ const fullInfoBlock: Command[] = [
   },
   {
     text: '',
-    output: '<span class="text-blue-300">Location:</span> Hasenkamp, Argentina',
+    output: '<span class="text-blue-300">Location:</span> Parana, Argentina',
     style: '',
   },
   {
@@ -127,7 +127,7 @@ export const runInfo = async (
   await delay(400);
 
   const parts = cmd.trim().split(/\s+/);
-  const modifier = parts.length > 1 ? parts[1].toLowerCase() : '-all';
+  const modifier = parts.length > 1 ? parts[1].toLowerCase() : '--all';
 
   const infoToDisplay = filteredBlocks[modifier];
 
@@ -145,7 +145,7 @@ export const runInfo = async (
     await delay(200);
   }
 
-  if (modifier === '-all') {
+  if (modifier === '--all') {
     setHistory((prev) => [
       ...prev,
       {
