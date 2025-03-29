@@ -1,8 +1,6 @@
-interface Props {
-    onComplete?: () => void;
-  }
+
   
-  export default function RampancyWarningOverlay({ onComplete }: Props) {
+  export default function RampancyWarningOverlay() {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80">
         <div className="p-6 text-center border-2 border-red-600 shadow-lg rounded-xl animate-scale-in bg-gradient-to-b from-black to-red-900">
