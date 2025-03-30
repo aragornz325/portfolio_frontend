@@ -29,11 +29,13 @@ export default function Terminal() {
     } = useTerminalLogic();
 
     return (
+        
         <div
             ref={containerRef}
             className="flex flex-col w-full h-full px-4 pt-4 overflow-y-auto font-mono text-sm"
             onClick={() => inputRef.current?.focus()}
         >
+            
             <div className="flex flex-col flex-grow">
                 {showWelcome && (
                     <div className="pl-8 mb-2 text-white">

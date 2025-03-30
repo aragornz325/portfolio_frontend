@@ -72,14 +72,17 @@ export function useTerminalLogic() {
 
     const injectFakeLogs = (lines: string[]) => {
         setHistory((prev) => [
-            ...prev,
-            ...lines.map((line) => ({
-                text: '',
-                output: line,
-                style: 'text-red-500 pl-8',
-            })),
+          ...prev,
+          ...lines.map((line) => ({
+            text: '',
+            output: (
+              <div className="animate-fade-in text-terminal-error font-terminal">
+                {line}
+              </div>
+            ),
+          })),
         ]);
-    };
+      };
 
     const handleCommand = async (cmd: string) => {
         if (isLocked) return;

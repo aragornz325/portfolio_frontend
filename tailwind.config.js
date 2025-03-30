@@ -19,12 +19,6 @@ module.exports = {
       screens: {
         xs: "360px",
       },
-      animation: {
-        'fade-in': 'fadeIn 1.5s ease-out forwards',
-        'typewriter': 'typewriter 2s steps(40) 1s forwards',
-        glitch: 'glitch 1s infinite',
-        scanlines: 'scanlines 2s infinite linear',
-      },
       keyframes: {
         glitch: {
           '0%, 100%': { transform: 'none' },
@@ -43,9 +37,14 @@ module.exports = {
           to: { width: '100%' },
         },
       },
+      animation: {
+        'fade-in': 'fadeIn 1.5s ease-out forwards',
+        'typewriter': 'typewriter 2s steps(40) 1s forwards',
+        glitch: 'glitch 1s infinite',
+        scanlines: 'scanlines 2s infinite linear',
+      },
     },
   },
-  plugins: [],
   safelist: [
     'animate-fade-in',
     'animate-typewriter',
@@ -56,5 +55,7 @@ module.exports = {
     'text-terminal-error',
     'text-terminal-info',
     'text-terminal-neutro',
+    'font-terminal',
   ],
+  plugins: [],
 };

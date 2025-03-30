@@ -1,20 +1,111 @@
 @import 'tailwindcss';
 @import "@fontsource/cascadia-code";
 
-
-
+/* Paleta base */
 :root {
   --background: #000000;
   --foreground: #00ff88;
   --font-terminal: 'Cascadia Code', 'Courier New', monospace;
+
+  --terminal-ok: #00bfff;
+  --terminal-warn: #ffcc00;
+  --terminal-error: #ff4d4d;
+  --terminal-info: #36d399;
+  --terminal-fg: #00ff88;
+  --terminal-neutro: #ffffff;
 }
 
 body {
   background-color: var(--background);
-  /* color: var(--foreground);
-  font-family: var(--font-terminal); */
   font-size: 14px;
   line-height: 1.5;
   margin: 0;
   padding: 0;
+}
+
+@layer utilities {
+  /* Colores */
+  .text-terminal-ok {
+    color: var(--terminal-ok);
+  }
+
+  .text-terminal-warn {
+    color: var(--terminal-warn);
+  }
+
+  .text-terminal-error {
+    color: var(--terminal-error);
+  }
+
+  .text-terminal-info {
+    color: var(--terminal-info);
+  }
+
+  .text-terminal-fg {
+    color: var(--terminal-fg);
+  }
+
+  .text-terminal-neutro {
+    color: var(--terminal-neutro);
+  }
+
+  /* Fuente */
+  .font-terminal {
+    font-family: var(--font-terminal);
+  }
+
+  /* Animaciones */
+  .animate-fade-in {
+    animation: fadeIn 1.5s ease-out forwards;
+  }
+
+  .animate-typewriter {
+    animation: typewriter 2s steps(40) 1s forwards;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .animate-glitch {
+    animation: glitch 0.8s infinite;
+    will-change: transform;
+  }
+
+  .animate-scanlines {
+    animation: scanlines 2s linear infinite;
+    opacity: 0.15;
+    mix-blend-mode: overlay;
+  }
+}
+
+/* Keyframes */
+@keyframes glitch {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: translateX(4px) skewX(8deg) scale(1.01);
+  }
+}
+
+@keyframes scanlines {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 100%; }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes typewriter {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
 }
