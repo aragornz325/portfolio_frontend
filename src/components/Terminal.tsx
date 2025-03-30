@@ -5,6 +5,7 @@ import HailingSignal from './DistressBeacon';
 import { GlitchBackground, FakeRampancyLogs } from './RampancyVisuals';
 import RampancyGlitchOverlay from './RampancyGlitchOverlay';
 import { useTerminalLogic } from '@/core/hooks/useTerminalLogic';
+import RampancyWarningOverlay from './RampancyWarningOverlay';
 
 
 export default function Terminal() {
@@ -24,6 +25,7 @@ export default function Terminal() {
         completeRampancy,
         injectFakeLogs,
         containerRef,
+        showWarning,
     } = useTerminalLogic();
 
     return (
@@ -87,10 +89,11 @@ export default function Terminal() {
                     autoFocus
                 />
             </div>
-
+            
             {hailingActive && (
                 <HailingSignal onComplete={() => setHailingActive(false)} />
             )}
+            {showWarning && <RampancyWarningOverlay />}
             {rampancyActive && (
                 <>
                     <GlitchBackground active />

@@ -1,13 +1,9 @@
-import { Geist_Mono } from "next/font/google";
+
+
 import "./globals.css";
 import { ReactQueryProvider } from "@/lib/providers/reac-query-provider";
 import { Analytics } from '@vercel/analytics/next';
 
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata = {
   title: "Jefe Maestro Console",
@@ -21,7 +17,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={geistMono.variable}>
+      <body className="text-sm bg-black text-terminal-fg font-terminal">
         <ReactQueryProvider>
           {children}
           <Analytics />

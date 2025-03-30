@@ -52,7 +52,7 @@ export function useRampancySystem(commandCount: number, onRampancyResolved: () =
     const rampancyTriggered = sessionStorage.getItem('rampancyTriggered');
     if (rampancyTriggered === 'true') return;
 
-    if (commandCount >= 13 && !warningShown) {
+    if (commandCount >= 8 && !warningShown) {
       setShowWarning(true);
       setWarningShown(true);
       setTimeout(() => {
@@ -60,11 +60,11 @@ export function useRampancySystem(commandCount: number, onRampancyResolved: () =
       }, 5000);
     }
 
-    if (commandCount >= 20 && rampancyTriggered !== 'true') {
+    if (commandCount >= 15 && rampancyTriggered !== 'true') {
+      setRampancyActive(true); 
       setTimeout(() => {
-        setTriggerRampancy(true);
-        setRampancyActive(true);
-      }, 1000);
+        setTriggerRampancy(true); 
+      }, 4000); 
       sessionStorage.setItem('rampancyTriggered', 'true');
     }
   }, [commandCount, warningShown]);

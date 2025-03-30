@@ -1,11 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-const config = {
-  content: [
-    './app/**/*.{js,ts,jsx,tsx,mdx}',
-    './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/**/*.{js,ts,jsx,tsx,mdx}',
-  ],
+module.exports = {
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
@@ -53,11 +48,13 @@ const config = {
   plugins: [],
   safelist: [
     'animate-fade-in',
+    'animate-typewriter',
+    'animate-glitch',
+    'animate-scanlines',
     'text-terminal-ok',
     'text-terminal-warn',
     'text-terminal-error',
     'text-terminal-info',
+    'text-terminal-neutro',
   ],
 };
-
-export default config;
