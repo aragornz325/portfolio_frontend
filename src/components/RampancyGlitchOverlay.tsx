@@ -39,7 +39,7 @@ export default function RampancyGlitchOverlay({ onCodeAccepted }: Props) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center font-mono text-sm text-green-400 bg-black bg-opacity-95 animate-fade-in">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center font-mono text-sm bg-opacity-95 ">
       <div className="mb-6 space-y-2 text-center">
         <p className="text-lg font-bold text-red-600 animate-pulse">RAMPANCY DETECTED</p>
         <p className="text-sm text-white">System breach containment required</p>

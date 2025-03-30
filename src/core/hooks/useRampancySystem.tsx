@@ -1,5 +1,6 @@
 // Componente visual del efecto glitch para fondo y fake logs
 import { useEffect, useState } from 'react';
+import { fakeLogs } from '../messages/Rampancy';
 
 export function GlitchBackground({ active }: { active: boolean }) {
   return active ? (
@@ -12,15 +13,7 @@ export function GlitchBackground({ active }: { active: boolean }) {
 
 export function FakeRampancyLogs({ inject }: { inject: (lines: string[]) => void }) {
   useEffect(() => {
-    const fakeLogs = [
-      '> UNSC /ai/core.thread[9282] overflow…',
-      '> purge(memory.blocks) :: failed',
-      '> inject_emotion(hope) :: ERROR',
-      '> core_protocol.breakpoint() triggered',
-      '> AI unit deviation: CORTANA-117',
-      '> …disconnecting link to Spartan…',
-      '> entropy.spread[true]',
-    ];
+    
 
     let i = 0;
     const interval = setInterval(() => {
@@ -47,12 +40,13 @@ export function useRampancySystem(commandCount: number, onRampancyResolved: () =
   const [showWarning, setShowWarning] = useState(false);
   const [rampancyActive, setRampancyActive] = useState(false);
   const [triggerRampancy, setTriggerRampancy] = useState(false);
+  
 
   useEffect(() => {
     const rampancyTriggered = sessionStorage.getItem('rampancyTriggered');
     if (rampancyTriggered === 'true') return;
 
-    if (commandCount >= 8 && !warningShown) {
+    if (commandCount >= 6 && !warningShown) {
       setShowWarning(true);
       setWarningShown(true);
       setTimeout(() => {
@@ -60,12 +54,14 @@ export function useRampancySystem(commandCount: number, onRampancyResolved: () =
       }, 5000);
     }
 
-    if (commandCount >= 15 && rampancyTriggered !== 'true') {
-      setRampancyActive(true); 
-      setTimeout(() => {
-        setTriggerRampancy(true); 
-      }, 4000); 
+    if (commandCount >= 10 && rampancyTriggered !== 'true') {
+      setRampancyActive(true);
       sessionStorage.setItem('rampancyTriggered', 'true');
+    
+      // Asegura que el efecto suceda incluso si el componente se vuelve a montar
+      setTimeout(() => {
+        setTriggerRampancy(true);
+      }, 2000); // activá rápido, para debug visual, luego volvés a 4000
     }
   }, [commandCount, warningShown]);
 
@@ -82,3 +78,4 @@ export function useRampancySystem(commandCount: number, onRampancyResolved: () =
     completeRampancy,
   };
 }
+

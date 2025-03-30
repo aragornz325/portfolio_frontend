@@ -1,60 +1,59 @@
 'use client';
+import { useEffect, useRef } from 'react';
 
-import { fakeLogs } from '@/core/messages/Rampancy';
-import { useEffect } from 'react';
-
-// Componente visual del efecto glitch para fondo y fake logs
-export function GlitchBackground({ active, intensity = 0 }: { 
-  active: boolean; 
-  intensity?: number; // 0 a 5 (nivel de rampancy)
+// Efecto de glitch para el fondo (con intensidad ajustable)
+export function GlitchBackground({ active, intensity = 3 }: { 
+  active: boolean;
+  intensity?: number; // 1-3 (para futura escalabilidad)
 }) {
   return active ? (
-    <div className="fixed inset-0 z-40 pointer-events-none mix-blend-screen">
-      {/* Fondo glitch (intensidad ajustable) */}
+    <div className="fixed inset-0 z-[9999] pointer-events-none z- mix-blend-screen">
       <div 
-        className="w-full h-full bg-black opacity-50 animate-glitch" 
-        style={{ opacity: 0.3 + (intensity * 0.1) }} 
+        className="w-full h-full bg-black animate-glitch" 
+        style={{ 
+          opacity: 0.3 + (intensity * 0.1),
+          animationDuration: `${1.5 - (intensity * 0.3)}s` 
+        }} 
       />
-      {/* Scanlines (más rápidos según intensidad) */}
       <div 
-        className="w-full h-full absolute top-0 left-0 bg-[radial-gradient(#0f0_1px,transparent_1px)] [background-size:4px_4px] opacity-25 animate-scanlines"
-        style={{ animationDuration: `${2 - (intensity * 0.3)}s` }} 
+        className="w-full h-full absolute top-0 left-0 bg-[radial-gradient(#0f0_1px,transparent_1px)] [background-size:4px_4px] opacity-20 animate-scanlines"
+        style={{ animationDuration: '2s' }}
       />
     </div>
   ) : null;
 }
 
-export function FakeRampancyLogs({ inject, intensity = 0 }: { 
-  inject: (lines: string[]) => void; 
-  intensity?: number; // 0 a 5
+// Logs falsos durante el caos (con velocidad ajustable)
+export function FakeRampancyLogs({ 
+  inject,
+  speed = 600 // ms entre logs
+}: { 
+  inject: (lines: string[]) => void;
+  speed?: number;
 }) {
+  const logsRef = useRef([
+    '> UNSC /ai/core.thread[9282] overflow…',
+    '> purge(memory.blocks) :: failed',
+    '> inject_emotion(hope) :: ERROR',
+    '> core_protocol.breakpoint() triggered',
+    '> AI unit deviation: CORTANA-117',
+    '> …disconnecting link to Spartan…',
+    '> entropy.spread[true]',
+    '> CRITICAL: Rampancy detected',
+    '> SYSTEM: Initiating emergency protocols'
+  ]);
+
   useEffect(() => {
-    if (intensity === 0) return;
+    if (speed <= 0) return;
 
     let i = 0;
-    let accumulatedLogs: string[] = [];
-    // Acelera los logs según intensidad (400ms -> 100ms)
-    const speed = Math.max(100, 400 - (intensity * 60));
-
     const interval = setInterval(() => {
-      // Alterna entre logs fijos y generados al azar
-      const log = i < fakeLogs.length ? fakeLogs[i] : generateRandomLog();
-      accumulatedLogs = [...accumulatedLogs, log];
-      inject([log]);
-
-      i++;
-      if (i >= 10) clearInterval(interval); // Limita a 10 logs
+      inject([logsRef.current[i]]);
+      i = (i + 1) % logsRef.current.length; // Loop infinito
     }, speed);
 
     return () => clearInterval(interval);
-  }, [inject, intensity]);
+  }, [inject, speed]);
 
   return null;
 }
-
-// Helper: Genera logs aleatorios (ejemplo)
-const generateRandomLog = () => {
-  const errors = ["CORRUPTION", "STACK_OVERFLOW", "MEMORY_LEAK"];
-  const randomHex = Math.floor(Math.random() * 0xFFFFFF).toString(16);
-  return `ERR#0x${randomHex}: ${errors[Math.floor(Math.random() * errors.length)]}`;
-};

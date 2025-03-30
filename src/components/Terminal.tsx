@@ -6,9 +6,11 @@ import { GlitchBackground, FakeRampancyLogs } from './RampancyVisuals';
 import RampancyGlitchOverlay from './RampancyGlitchOverlay';
 import { useTerminalLogic } from '@/core/hooks/useTerminalLogic';
 import RampancyWarningOverlay from './RampancyWarningOverlay';
+import { useEffect, useState } from 'react';
 
 
 export default function Terminal() {
+    const [showOverride, setShowOverride] = useState(false);
     const {
         setHistoryIndex,
         handleKeyDown,
@@ -26,16 +28,34 @@ export default function Terminal() {
         injectFakeLogs,
         containerRef,
         showWarning,
+        injectChaosLogs
     } = useTerminalLogic();
 
+    useEffect(() => {
+        if (triggerRampancy && rampancyActive) {
+            injectChaosLogs(); // inyecta los logs fase 2
+
+            const timeout = setTimeout(() => {
+                setShowOverride(true); // muestra el cartel luego de 4 segundos
+            }, 1500);
+
+            return () => clearTimeout(timeout);
+        }
+    }, [triggerRampancy]);
+
+    console.log({
+        rampancyActive,
+        triggerRampancy
+    });
+
     return (
-        
+
         <div
             ref={containerRef}
             className="flex flex-col w-full h-full px-4 pt-4 overflow-y-auto font-mono text-sm"
             onClick={() => inputRef.current?.focus()}
         >
-            
+
             <div className="flex flex-col flex-grow">
                 {showWelcome && (
                     <div className="pl-8 mb-2 text-white">
@@ -91,19 +111,19 @@ export default function Terminal() {
                     autoFocus
                 />
             </div>
-            
+
             {hailingActive && (
                 <HailingSignal onComplete={() => setHailingActive(false)} />
             )}
             {showWarning && <RampancyWarningOverlay />}
             {rampancyActive && (
                 <>
-                    <GlitchBackground active />
                     <FakeRampancyLogs inject={injectFakeLogs} />
+                    <GlitchBackground active />
                 </>
             )}
 
-            {triggerRampancy && rampancyActive && (
+            {showOverride && rampancyActive && (
                 <RampancyGlitchOverlay onCodeAccepted={completeRampancy} />
             )}
             <div ref={endOfTerminalRef} />

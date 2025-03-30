@@ -54,36 +54,22 @@ body {
     font-family: var(--font-terminal);
   }
 
-  /* Animaciones */
-  .animate-fade-in {
-    animation: fadeIn 1.5s ease-out forwards;
-  }
-
-  .animate-typewriter {
-    animation: typewriter 2s steps(40) 1s forwards;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  .animate-glitch {
-    animation: glitch 0.8s infinite;
-    will-change: transform;
-  }
-
-  .animate-scanlines {
-    animation: scanlines 2s linear infinite;
-    opacity: 0.15;
-    mix-blend-mode: overlay;
-  }
-}
-
-/* Keyframes */
+  /* Keyframes */
 @keyframes glitch {
   0%, 100% {
     transform: none;
   }
-  50% {
-    transform: translateX(4px) skewX(8deg) scale(1.01);
+  20% {
+    transform: translate(-2px, 1px) skewX(-10deg);
+  }
+  40% {
+    transform: translate(3px, -1px) skewY(5deg);
+  }
+  60% {
+    transform: translate(-1px, 2px) skewX(5deg);
+  }
+  80% {
+    transform: translate(1px, -2px) skewY(-8deg);
   }
 }
 
@@ -109,3 +95,27 @@ body {
     width: 100%;
   }
 }
+
+
+  /* Animaciones */
+  .animate-fade-in {
+    animation: fadeIn 1.5s ease-out forwards;
+  }
+
+  .animate-typewriter {
+    animation: typewriter 2s steps(40) 1s forwards;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .animate-glitch {
+    animation: glitch 0.3s infinite;
+  }
+
+  .animate-scanlines {
+    animation: scanlines 2s linear infinite;
+    opacity: 0.15;
+    mix-blend-mode: overlay;
+  }
+}
+

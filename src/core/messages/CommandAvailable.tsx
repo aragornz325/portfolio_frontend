@@ -29,5 +29,11 @@ export const commandAvailable = [
         command: 'Command: hail',
         description: 'Initiating UNSC Standard Hailing Protocol – Class Sigma',
     },
+    {
+        command: 'Command: ** ONI COMMANDS **',
+        description: 'Few can access. Fewer understand. [are you one of them?]'
+    },
+
+
 
 ];

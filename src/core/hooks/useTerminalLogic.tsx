@@ -10,6 +10,7 @@ import { runTacticsSequence } from "../commands/runTacticsSequence";
 import { runMissionLogs } from "../commands/runMissionLogs";
 import { runWhoami } from "../commands/runWhoami";
 import { commandAvailable } from "../messages/CommandAvailable";
+import { fakeLogs } from "../messages/Rampancy";
 
 export function useTerminalLogic() {
     const [history, setHistory] = useState<Command[]>([]);
@@ -23,6 +24,9 @@ export function useTerminalLogic() {
     const [commandHistory, setCommandHistory] = useState<string[]>([]);
     const [historyIndex, setHistoryIndex] = useState<number | null>(null);
     const [commandCount, setCommandCount] = useState(0);
+
+     
+      
 
     useEffect(() => {
         const timeout = setTimeout(() => {
@@ -69,6 +73,28 @@ export function useTerminalLogic() {
             window.addEventListener('keydown', handleKey);
         });
     };
+
+    const injectChaosLogs = (onComplete?: () => void) => {
+        let i = 0;
+        const interval = setInterval(() => {
+          setHistory((prev) => [
+            ...prev,
+            {
+              text: '',
+              output: (
+                <div className="overflow-hidden animate-typewriter text-terminal-error font-terminal whitespace-nowrap">
+                  {fakeLogs[i]}
+                </div>
+              ),
+            },
+          ]);
+          i++;
+          if (i >= fakeLogs.length) {
+            clearInterval(interval);
+            if (onComplete) onComplete();
+          }
+        }, 600);
+      };
 
     const injectFakeLogs = (lines: string[]) => {
         setHistory((prev) => [
@@ -228,6 +254,7 @@ export function useTerminalLogic() {
         completeRampancy,
         injectFakeLogs,
         showWarning,
-        containerRef
+        containerRef,
+        injectChaosLogs
     };
 }

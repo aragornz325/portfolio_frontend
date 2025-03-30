@@ -151,7 +151,7 @@ export const runInfo = async (
       {
         text: '',
         output:
-          '<span class="text-gray-400">Tip:</span> Use info -origin, info -status, etc. to access specific modules.',
+          '<span class="text-gray-400">Tip:</span> Use info --origin, info --status, etc. to access specific modules.',
         style: '',
       },
     ]);
